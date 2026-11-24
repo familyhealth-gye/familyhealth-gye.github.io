@@ -41,7 +41,7 @@ ESPECIALIDADES = [
      "Consulta ginecológica y control del embarazo, con un trato cuidadoso y en un ambiente privado.",
      ["Consulta ginecológica", "Control prenatal", "Papanicolaou", "Ecografía (ver la sección de Ecografía)"],
      "https://schema.org/Gynecologic"),
-    ("medicina-general", "Medicina general", "Medicina general y medicina interna en Mucho Lote, Guayaquil",
+    ("medicina-general", "Medicina general", "Medicina general en Mucho Lote, Guayaquil",
      "Medicina general y medicina interna en Mucho Lote, norte de Guayaquil: consulta, control de enfermedades crónicas, certificados médicos y recetas.",
      "Consulta médica para adultos: valoración de síntomas, seguimiento de enfermedades crónicas y orientación para derivarte con el especialista cuando lo necesites.",
      ["Consulta de medicina general", "Medicina interna", "Control de presión arterial y de otras enfermedades crónicas", "Certificados médicos", "Recetas"],
@@ -163,7 +163,7 @@ def pagina_inicio():
 {faqs}"""
     faq_ld = {"@context": "https://schema.org", "@type": "FAQPage",
               "mainEntity": [{"@type": "Question", "name": p, "acceptedAnswer": {"@type": "Answer", "text": r}} for p, r in FAQ]}
-    desc = f"{NOMBRE}, en Mucho Lote 2, norte de Guayaquil: odontología, pediatría, ginecología, medicina general, ecografía, nutrición, psicología y laboratorio."
+    desc = "Odontología, pediatría, ginecología, medicina general, ecografía, nutrición, psicología y laboratorio en Mucho Lote 2, norte de Guayaquil."
     ld = [CLINICA, faq_ld]
     return pagina(f"{NOMBRE} | Guayaquil", desc, "", cuerpo, ld)
 
@@ -183,7 +183,7 @@ def pagina_especialidad(e):
           "inLanguage": "es", "provider": {"@id": f"{BASE}/#clinic"}}
     if spec:
         ld["specialty"] = spec
-    return pagina(f"{h1} | {NOMBRE}", desc, f"{slug}/", cuerpo, ld)
+    return pagina(f"{h1} | Family Health", desc, f"{slug}/", cuerpo, ld)
 
 
 def escribir(ruta, texto):
