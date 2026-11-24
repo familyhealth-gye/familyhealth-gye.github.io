@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://familyhealth-gye.github.io/sitemap.xml
