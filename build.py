@@ -101,11 +101,25 @@ CLINICA = {
 }
 
 
+EMOJI = {"odontologia": "🦷", "pediatria": "👶", "ginecologia": "🤰", "medicina-general": "🩺",
+         "ecografia": "🔊", "nutricion": "🥗", "psicologia": "🧠", "laboratorio": "🧪"}
+MAPA_EMBED = "https://www.google.com/maps?q=Centro+de+especialidades+Family+Health+Guayaquil&output=embed"
+RESENAS = "4,9 en Google · 81 opiniones"  # actualizar a mano cuando cambie (visible en la portada, no va en los datos estructurados)
+PASOS = [("Escríbenos por WhatsApp", f"Al {TEL_VISIBLE}, cuéntanos qué especialidad necesitas."),
+         ("Elige tu horario", "Te proponemos los horarios disponibles y confirmamos tu cita."),
+         ("Ven a tu cita", "Te esperamos en Mucho Lote 2, con tu orden médica si tienes una.")]
+
+
+def horario_tabla():
+    return "<table>" + "".join(f"<tr><td>{d}</td><td>{h}</td></tr>" for d, h in HORARIO) + "</table>"
+
+
 def pagina(titulo, desc, ruta, cuerpo, ld):
     url = f"{BASE}/{ruta}"
     nav = "".join(f'<a href="/{e[0]}/">{e[1]}</a>' for e in ESPECIALIDADES)
     redes = " · ".join(f'<a href="{u}" rel="me">{n}</a>' for n, u in REDES)
-    horario = "".join(f"<tr><td>{d}</td><td>{h}</td></tr>" for d, h in HORARIO)
+    enlaces = "".join(f'<a href="/{e[0]}/">{e[1]}</a><br>' for e in ESPECIALIDADES[:4])
+    enlaces2 = "".join(f'<a href="/{e[0]}/">{e[1]}</a><br>' for e in ESPECIALIDADES[4:])
     return f"""<!doctype html>
 <html lang="es">
 <head>
@@ -113,6 +127,7 @@ def pagina(titulo, desc, ruta, cuerpo, ld):
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{titulo}</title>
 <meta name="description" content="{desc}">
+<meta name="theme-color" content="#0a7a72">
 <link rel="canonical" href="{url}">
 <link rel="icon" href="/logo-192.webp">
 <meta property="og:title" content="{titulo}">
@@ -125,60 +140,90 @@ def pagina(titulo, desc, ruta, cuerpo, ld):
 <script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>
 </head>
 <body>
-<header>
-<a href="/"><img src="/logo-192.webp" alt="{NOMBRE}" width="56" height="56"></a>
-<nav aria-label="Especialidades">{nav}</nav>
-</header>
+<header class="top"><div class="wrap bar">
+<a class="brand" href="/"><img src="/logo-192.webp" alt="" width="54" height="54"><span>Family Health<small>Centro de Especialidades · Guayaquil</small></span></a>
+<nav class="nav" aria-label="Especialidades">{nav}</nav>
+<a class="btn btn-sm" href="{WA}">WhatsApp</a>
+</div></header>
 <main>
 {cuerpo}
 </main>
-<footer>
-<p><strong>{NOMBRE}</strong><br>{DIRECCION}<br>WhatsApp y teléfono: <a href="{WA}">{TEL_VISIBLE}</a></p>
-<table aria-label="Horario de atención">{horario}</table>
-<p>{redes}</p>
+<footer><div class="wrap">
+<div class="cols">
+<div><h3>{NOMBRE}</h3><p>{DIRECCION}</p><p>WhatsApp y teléfono: <a href="{WA}">{TEL_VISIBLE}</a></p><p>{redes}</p></div>
+<div><h3>Horario</h3>{horario_tabla()}</div>
+<div><h3>Especialidades</h3><p>{enlaces}</p></div>
+<div><h3>&nbsp;</h3><p>{enlaces2}</p></div>
+</div>
 <p class="aviso">{AVISO}</p>
-</footer>
+</div></footer>
+<a class="flotante" href="{WA}" aria-label="Escríbenos por WhatsApp">💬 WhatsApp</a>
 </body>
 </html>
 """
 
 
-def bloque_cita():
-    return f'<p><a class="btn" href="{WA}">Agenda tu cita por WhatsApp</a></p>'
+def bloque_cita(titulo="¿Listo para agendar tu cita?"):
+    return f"""<div class="cta"><h2>{titulo}</h2><p>Escríbenos por WhatsApp y te decimos los horarios disponibles.</p>
+<a class="btn" href="{WA}">Agenda por WhatsApp</a></div>"""
+
+
+def tarjetas_info():
+    return f"""<div class="info">
+<div class="tarjeta"><h3>Horario de atención</h3>{horario_tabla()}</div>
+<div class="tarjeta"><h3>Dónde estamos</h3><p>{DIRECCION}.</p><p><a href="{MAPA}">Cómo llegar</a></p></div>
+<div class="tarjeta"><h3>Agenda tu cita</h3><p>Con cita previa, por WhatsApp.</p><p><a href="{WA}"><strong>{TEL_VISIBLE}</strong></a></p></div>
+</div>"""
 
 
 def pagina_inicio():
-    tarjetas = "".join(f'<li><a href="/{e[0]}/"><strong>{e[1]}</strong><span>{e[4].split(".")[0]}.</span></a></li>' for e in ESPECIALIDADES)
+    tarjetas = "".join(
+        f'<li><a href="/{e[0]}/"><span class="ico" aria-hidden="true">{EMOJI[e[0]]}</span><strong>{e[1]}</strong>'
+        f'<span class="d">{e[4].split(".")[0]}.</span><span class="mas">Ver más →</span></a></li>' for e in ESPECIALIDADES)
+    pasos = "".join(f"<li><strong>{t}</strong>{d}</li>" for t, d in PASOS)
     faqs = "".join(f"<details><summary>{p}</summary><p>{r}</p></details>" for p, r in FAQ)
-    cuerpo = f"""<section class="hero">
+    cuerpo = f"""<section class="hero"><div class="wrap">
+<p class="eyebrow">Mucho Lote 2 · Norte de Guayaquil</p>
 <h1>{NOMBRE} en Guayaquil</h1>
-<p>Odontología, pediatría, ginecología, medicina general, ecografía, nutrición, psicología y laboratorio clínico en un solo lugar, en Mucho Lote 2, al norte de Guayaquil. Atención para toda la familia con cita previa.</p>
+<p class="lead">Odontología, pediatría, ginecología, medicina general, ecografía, nutrición, psicología y laboratorio clínico en un solo lugar. Atención para toda la familia con cita previa.</p>
+<p class="acciones"><a class="btn btn-claro" href="{WA}">Agenda por WhatsApp</a><a class="btn btn-borde" href="#especialidades">Ver especialidades</a></p>
+<ul class="chips"><li>★ {RESENAS}</li><li>Niños, adultos y embarazadas</li><li>Con cita previa</li></ul>
+</div></section>
+<div class="wrap">
+{tarjetas_info()}
+<section class="bloque" id="especialidades"><h2>Nuestras especialidades</h2><p class="sub">Elige una para ver qué ofrecemos.</p><ul class="cards">{tarjetas}</ul></section>
+<section class="bloque"><h2>Cómo agendar tu cita</h2><p class="sub">Tres pasos, sin filas.</p><ol class="pasos">{pasos}</ol></section>
+<section class="bloque"><h2>Dónde encontrarnos</h2><p class="sub">{DIRECCION}.</p>
+<div class="dos"><div><iframe class="mapa" title="Mapa de {NOMBRE}" src="{MAPA_EMBED}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+<div><h3>Horario</h3>{horario_tabla()}<p class="acciones" style="margin-top:14px"><a class="btn" href="{MAPA}">Cómo llegar</a></p></div></div></section>
+<section class="bloque"><h2>Preguntas frecuentes</h2>{faqs}</section>
 {bloque_cita()}
-</section>
-<h2>Especialidades</h2>
-<ul class="cards">{tarjetas}</ul>
-<h2>Dónde estamos</h2>
-<p>{DIRECCION}. <a href="{MAPA}">Ver en Google Maps</a>.</p>
-<h2>Preguntas frecuentes</h2>
-{faqs}"""
+</div>"""
     faq_ld = {"@context": "https://schema.org", "@type": "FAQPage",
               "mainEntity": [{"@type": "Question", "name": p, "acceptedAnswer": {"@type": "Answer", "text": r}} for p, r in FAQ]}
     desc = "Odontología, pediatría, ginecología, medicina general, ecografía, nutrición, psicología y laboratorio en Mucho Lote 2, norte de Guayaquil."
-    ld = [CLINICA, faq_ld]
-    return pagina(f"{NOMBRE} | Guayaquil", desc, "", cuerpo, ld)
+    return pagina(f"{NOMBRE} | Guayaquil", desc, "", cuerpo, [CLINICA, faq_ld])
 
 
 def pagina_especialidad(e):
     slug, corto, h1, desc, intro, servicios, spec = e
     lista = "".join(f"<li>{s}</li>" for s in servicios)
-    cuerpo = f"""<h1>{h1}</h1>
-<p>{intro}</p>
-<h2>Qué ofrecemos</h2>
-<ul>{lista}</ul>
+    otras = "".join(f'<li><a href="/{o[0]}/">{EMOJI[o[0]]} {o[1]}</a></li>' for o in ESPECIALIDADES if o[0] != slug)
+    cuerpo = f"""<section class="hero hero-sm"><div class="wrap">
+<p class="migas"><a href="/">Inicio</a> › {corto}</p>
+<div class="emoji-grande" aria-hidden="true">{EMOJI[slug]}</div>
+<h1>{h1}</h1>
+<p class="lead">{intro}</p>
+<p class="acciones"><a class="btn btn-claro" href="{WA}">Agenda por WhatsApp</a></p>
+</div></section>
+<div class="wrap">
+{tarjetas_info()}
+<section class="bloque"><h2>Qué ofrecemos</h2><ul class="checks">{lista}</ul></section>
+<section class="bloque"><h2>Dónde y cuándo</h2>
+<p>{NOMBRE}, {DIRECCION}. Atendemos con cita previa de lunes a viernes de 8:30 a. m. a 7:00 p. m. y los sábados de 8:30 a. m. a 4:00 p. m.</p></section>
+<section class="bloque"><h2>Otras especialidades</h2><ul class="otras">{otras}</ul></section>
 {bloque_cita()}
-<h2>Dónde y cuándo</h2>
-<p>{NOMBRE}, {DIRECCION}. Atendemos con cita previa de lunes a viernes de 8:30 a. m. a 7:00 p. m. y los sábados de 8:30 a. m. a 4:00 p. m.</p>
-<p><a href="/">Ver todas las especialidades</a></p>"""
+</div>"""
     ld = {"@context": "https://schema.org", "@type": "MedicalWebPage", "name": h1, "description": desc, "url": f"{BASE}/{slug}/",
           "inLanguage": "es", "provider": {"@id": f"{BASE}/#clinic"}}
     if spec:
