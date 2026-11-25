@@ -12,7 +12,7 @@ Todo el contenido está en `build.py` (arriba: datos del centro, especialidades,
 - Armonización orofacial y terapia física NO están en el sitio (publicidad estética sanitaria, revisar reglas antes).
 - Sin número de permiso ACESS, sin precios, sin reseñas ni calificación en los datos estructurados (a propósito).
 - El texto de cada especialidad lo debería revisar el abogado/DPO y un médico, como el resto de la app.
-- **Blog** (`BLOG` en `build.py`, 3 artículos): información general escrita sin revisión médica. Un médico del centro debe leer cada artículo antes de publicar.
+- **Blog** (un `.txt` por artículo en `articulos/`, molde en `articulos/COMO-ESCRIBIR.md`; se publica solo con `.github/workflows/publicar.yml` al guardar en `main` — en GitHub, Settings → Pages → Source: «GitHub Actions»): información general escrita sin revisión médica. Un médico del centro debe leer cada artículo antes de publicar.
 - **Horario**: confirmado por el dueño 2026-11-25: L–V 8:30–19:00 (Maps), sáb. 9:00–16:00. Si Maps dice otra hora el sábado, corregir Maps.
 - **Fotos** (`fotos/`): las que la clínica subió a su ficha de Maps, sin pacientes reales (la de consulta es con un creador de contenido que trabaja para el centro). Nunca agregar fotos donde se vea un paciente sin su consentimiento escrito.
 - **Reseñas**: «4,9 · 81 opiniones» está escrito a mano (`RESENAS`); el chip enlaza a Google, donde siempre está el número real. Actualizarlo de vez en cuando.
