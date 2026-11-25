@@ -1,10 +1,12 @@
-"""Genera el sitio estático de Family Health: `python build.py`. Todo el contenido vive en este archivo.
+"""Genera el sitio estático de Family Health: `python build.py`. El contenido vive en este archivo, salvo los artículos del blog (carpeta articulos/).
 
 Escribe index.html, una página por especialidad (<slug>/index.html), sitemap.xml, robots.txt y llms.txt.
 """
 import datetime
+import html
 import json
 import pathlib
+import re
 
 BASE = "https://familyhealth-gye.github.io"  # si algún día hay dominio propio, cambiar solo esta línea y volver a generar
 OUT = pathlib.Path(__file__).parent
@@ -113,38 +115,48 @@ FOTOS = [("/fotos/recepcion.webp", "Sala de espera con el logo de Family Health"
          ("/fotos/consultorio.webp", "Sala con espacio de juego para niños"),
          ("/fotos/consulta.webp", "Una de nuestras doctoras en consulta")]
 
-# Blog: slug, título, descripción, fecha (AAAA-MM-DD), cuerpo HTML. Información general: la revisa un médico antes de publicar.
-BLOG = [
-    ("muelas-del-juicio", "Muelas del juicio: cuándo conviene sacarlas",
-     "No todas las muelas del juicio hay que sacarlas. Estas son las señales para ir al dentista y qué esperar de la valoración.",
-     "2026-11-24", """
-<p>Las muelas del juicio (terceros molares) suelen salir entre los 17 y los 25 años. A muchas personas les salen bien y no dan problemas. A otras les salen torcidas, a medias o se quedan atrapadas en el hueso.</p>
-<h2>Señales de que debes hacerte revisar</h2>
-<ul><li>Dolor o presión al fondo de la boca.</li><li>Encía hinchada o que sangra detrás de la última muela.</li><li>Mal sabor o mal aliento que no se quita con el cepillado.</li><li>Dificultad para abrir la boca.</li><li>Comida que se queda atrapada siempre en el mismo lugar.</li></ul>
-<h2>Cómo se decide</h2>
-<p>El dentista revisa tu boca y pide una radiografía panorámica para ver la posición de cada muela, la raíz y su cercanía con el nervio. Con eso te explica si conviene sacarla, vigilarla o dejarla.</p>
-<h2>Después de la extracción</h2>
-<p>Sigue al pie de la letra las indicaciones que te den, incluida la medicación. Regresa o escribe antes de tu control si tienes fiebre, si el sangrado no para con presión, o si la hinchazón o el dolor aumentan después del tercer día.</p>"""),
-    ("fiebre-en-ninos", "Fiebre en niños: cuándo llevarlo al pediatra",
-     "Qué se considera fiebre, qué señales indican que hay que ir de inmediato y qué hacer mientras tanto en casa.",
-     "2026-11-24", """
-<p>La fiebre es una defensa del cuerpo y casi siempre se debe a infecciones comunes. Se considera fiebre una temperatura de <strong>38 °C o más</strong>.</p>
-<h2>Ve de inmediato a emergencia si</h2>
-<ul><li>Tu bebé tiene <strong>menos de 3 meses</strong> y 38 °C o más.</li><li>Le cuesta respirar o respira muy rápido.</li><li>Está muy decaído, muy dormido o difícil de despertar.</li><li>Tiene una convulsión.</li><li>Le salen manchas en la piel que no desaparecen al presionarlas.</li><li>No orina, tiene la boca seca o llora sin lágrimas.</li></ul>
-<p>En una emergencia llama al <strong>911</strong>.</p>
-<h2>Agenda una consulta si</h2>
-<ul><li>La fiebre dura más de tres días.</li><li>Tiene dolor de oído, dolor al orinar o tos que no mejora.</li><li>La fiebre baja y vuelve a subir después de varios días.</li></ul>
-<h2>Mientras tanto, en casa</h2>
-<p>Dale líquidos con frecuencia y vístelo con ropa ligera. No le des medicamentos sin indicación del pediatra y nunca le des aspirina.</p>"""),
-    ("primera-visita-al-dentista", "Primera visita al dentista: a qué edad llevar a tu hijo",
-     "La primera consulta dental es antes de lo que muchos padres creen. Te contamos cuándo ir y cómo cuidar sus dientes en casa.",
-     "2026-11-24", """
-<p>Lo recomendado es llevar a tu hijo al dentista <strong>cuando le sale el primer diente o antes de su primer cumpleaños</strong>. En esa visita se revisa cómo vienen sus dientes y te enseñan a cuidarlos.</p>
-<h2>Cuidados en casa</h2>
-<ul><li>Cepilla sus dientes dos veces al día desde el primer diente.</li><li>Usa pasta con flúor: del tamaño de un grano de arroz hasta los 3 años, y del tamaño de una arveja de los 3 a los 6 años.</li><li>No lo acuestes con biberón de leche o jugo.</li><li>Evita darle dulces y bebidas azucaradas entre comidas.</li></ul>
-<h2>Cuándo ir antes del control</h2>
-<p>Si ves manchas blancas o cafés en sus dientes, si se queja de dolor o si se golpeó un diente, agenda una cita sin esperar al control.</p>"""),
-]
+# Blog: un archivo .txt por artículo en articulos/ (molde en articulos/COMO-ESCRIBIR.md). Los que empiezan con
+# "borrador-" no se publican. Información general: la revisa un médico antes de publicar.
+def _en_linea(s):
+    s = html.escape(s, quote=False)
+    return re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", s)
+
+
+def _cuerpo_html(texto):
+    """Texto simple → HTML: línea = párrafo, '## ' = subtítulo, '- ' = punto de lista, **negrita**."""
+    salida, lista = [], []
+    for linea in texto.splitlines() + [""]:
+        linea = linea.strip()
+        if linea.startswith("- "):
+            lista.append(f"<li>{_en_linea(linea[2:])}</li>")
+            continue
+        if lista:
+            salida.append("<ul>" + "".join(lista) + "</ul>")
+            lista = []
+        if linea.startswith("## "):
+            salida.append(f"<h2>{_en_linea(linea[3:])}</h2>")
+        elif linea:
+            salida.append(f"<p>{_en_linea(linea)}</p>")
+    return "\n".join(salida)
+
+
+def leer_blog():
+    articulos = []
+    for f in (OUT / "articulos").glob("*.txt"):
+        if f.name.startswith("borrador-"):
+            continue
+        cabecera, _, resto = f.read_text(encoding="utf-8-sig").replace("\r\n", "\n").partition("\n\n")
+        campos = dict(l.split(":", 1) for l in cabecera.splitlines() if ":" in l)
+        campos = {k.strip().lower(): v.strip() for k, v in campos.items()}
+        try:
+            fecha = datetime.date.fromisoformat(campos["fecha"]).isoformat()
+            articulos.append((f.stem, html.escape(campos["título"]), html.escape(campos["resumen"]), fecha, _cuerpo_html(resto)))
+        except (KeyError, ValueError) as e:
+            raise SystemExit(f"{f.name}: falta Título, Resumen o Fecha (AAAA-MM-DD) arriba del texto ({e})")
+    return sorted(articulos, key=lambda a: (a[3], a[0]), reverse=True)
+
+
+BLOG = leer_blog()
 PASOS = [("Escríbenos por WhatsApp", f"Al {TEL_VISIBLE}, cuéntanos qué especialidad necesitas."),
          ("Elige tu horario", "Te proponemos los horarios disponibles y confirmamos tu cita."),
          ("Ven a tu cita", "Te esperamos en Mucho Lote 2, con tu orden médica si tienes una.")]
