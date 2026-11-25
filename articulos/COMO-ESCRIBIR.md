@@ -19,6 +19,7 @@ Primer párrafo. Deja una línea en blanco entre párrafos.
 
 4. Toca **Commit changes**. En 1 o 2 minutos el artículo aparece en la página.
 
+- **Programar:** pon una fecha futura. El artículo se publica solo ese día a las 6:15 a. m. (hora de Ecuador). Hasta entonces se puede corregir.
 - **Borrador:** si el nombre empieza con `borrador-` (ej. `borrador-limpieza-dental.txt`), no se publica. Para publicarlo, quítale `borrador-` al nombre.
 - **Corregir:** abre el archivo, toca el lápiz, cambia y vuelve a hacer *Commit changes*.
 - **Quitar:** abre el archivo → menú `…` → *Delete file*.

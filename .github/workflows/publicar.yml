@@ -6,6 +6,8 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    - cron: "15 11 * * *"  # 06:15 en Ecuador: publica los artículos programados para hoy
 
 permissions:
   contents: read

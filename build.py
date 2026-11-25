@@ -7,6 +7,7 @@ import html
 import json
 import pathlib
 import re
+import shutil
 
 BASE = "https://familyhealth-gye.github.io"  # si algún día hay dominio propio, cambiar solo esta línea y volver a generar
 OUT = pathlib.Path(__file__).parent
@@ -140,6 +141,10 @@ def _cuerpo_html(texto):
     return "\n".join(salida)
 
 
+# Hoy en Ecuador: un artículo con fecha futura queda programado y lo publica la corrida diaria del workflow.
+HOY = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=-5))).date().isoformat()
+
+
 def leer_blog():
     articulos = []
     for f in (OUT / "articulos").glob("*.txt"):
@@ -150,6 +155,8 @@ def leer_blog():
         campos = {k.strip().lower(): v.strip() for k, v in campos.items()}
         try:
             fecha = datetime.date.fromisoformat(campos["fecha"]).isoformat()
+            if fecha > HOY:
+                continue
             articulos.append((f.stem, html.escape(campos["título"]), html.escape(campos["resumen"]), fecha, _cuerpo_html(resto)))
         except (KeyError, ValueError) as e:
             raise SystemExit(f"{f.name}: falta Título, Resumen o Fecha (AAAA-MM-DD) arriba del texto ({e})")
@@ -342,11 +349,12 @@ def main():
     escribir("index.html", pagina_inicio())
     for e in ESPECIALIDADES:
         escribir(f"{e[0]}/index.html", pagina_especialidad(e))
+    shutil.rmtree(OUT / "blog", ignore_errors=True)  # blog/ es 100 % generado: un artículo borrado no debe quedar publicado
     escribir("blog/index.html", pagina_blog_indice())
     for b in BLOG:
         escribir(f"blog/{b[0]}/index.html", pagina_articulo(b))
 
-    hoy = datetime.date.today().isoformat()
+    hoy = HOY
     urls = ([f"{BASE}/"] + [f"{BASE}/{e[0]}/" for e in ESPECIALIDADES]
             + [f"{BASE}/blog/"] + [f"{BASE}/blog/{b[0]}/" for b in BLOG])
     items = "".join(f"<url><loc>{u}</loc><lastmod>{hoy}</lastmod></url>" for u in urls)
