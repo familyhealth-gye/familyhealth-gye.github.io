@@ -48,6 +48,8 @@ a{color:#0b6f9c}
 .articulo h2{margin-top:26px}
 .articulo li{margin:4px 0}
 .aviso-art{margin-top:24px;padding-top:12px;border-top:1px solid var(--borde);font-size:.88rem;color:var(--gris)}
+.caja-videos{background:#fff;border:1px solid var(--borde);border-radius:var(--r);padding:18px;text-align:center}
+.caja-videos blockquote{margin:0 auto 12px}
 .migas{font-size:.88rem;opacity:.92;margin:0 0 14px}
 .migas a{color:#fff}
 .emoji-grande{font-size:2.4rem;line-height:1;margin-bottom:6px}

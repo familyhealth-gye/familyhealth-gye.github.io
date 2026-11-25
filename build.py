@@ -216,6 +216,20 @@ def tarjetas_info():
 </div>"""
 
 
+# Perfil de TikTok incrustado (oficial): muestra los videos más recientes solo, sin subir nada a mano.
+# Se carga al tocar el botón para no meter el script y las cookies de TikTok a quien no lo pide.
+TIKTOK_USUARIO = "familyhealth.gye"
+CARGAR_TIKTOK = ("this.parentNode.classList.add('cargado');var s=document.createElement('script');"
+                 "s.src='https://www.tiktok.com/embed.js';s.async=true;document.body.appendChild(s);this.remove()")
+
+
+def bloque_videos():
+    return f'''<section class="bloque videos"><h2>Nuestros videos</h2><p class="sub">Consejos cortos de nuestros especialistas. Se actualiza solo con lo último que publicamos.</p>
+<div class="caja-videos"><blockquote class="tiktok-embed" cite="https://www.tiktok.com/@{TIKTOK_USUARIO}" data-unique-id="{TIKTOK_USUARIO}" data-embed-type="creator" style="max-width:780px;min-width:288px"><section><a target="_blank" rel="noopener" href="https://www.tiktok.com/@{TIKTOK_USUARIO}">@{TIKTOK_USUARIO} en TikTok</a></section></blockquote>
+<button class="btn" type="button" onclick="{CARGAR_TIKTOK}">Ver los videos aquí</button></div>
+<p class="sub" style="margin-top:12px">También en <a href="{REDES[0][1]}">Instagram</a>. Al tocar el botón se carga contenido de TikTok.</p></section>'''
+
+
 def pagina_inicio():
     tarjetas = "".join(
         f'<li><a href="/{e[0]}/"><span class="ico" aria-hidden="true">{EMOJI[e[0]]}</span><strong>{e[1]}</strong>'
@@ -240,6 +254,7 @@ def pagina_inicio():
 <div><h3>Horario</h3>{horario_tabla()}<p class="acciones" style="margin-top:14px"><a class="btn" href="{MAPA}">Cómo llegar</a></p></div></div></section>
 <section class="bloque"><h2>Preguntas frecuentes</h2>{faqs}</section>
 <section class="bloque"><h2>Consejos de salud</h2><p class="sub">Información general escrita por el centro. <a href="/blog/">Ver todos</a></p><ul class="cards">{tarjetas_blog()}</ul></section>
+{bloque_videos()}
 {bloque_cita()}
 </div>"""
     faq_ld = {"@context": "https://schema.org", "@type": "FAQPage",
