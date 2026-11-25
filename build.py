@@ -84,7 +84,7 @@ CLINICA = {
     "alternateName": ["Family Health Guayaquil"],
     "url": f"{BASE}/",
     "logo": f"{BASE}/logo.png",
-    "image": f"{BASE}/logo.png",
+    "image": [f"{BASE}/fotos/fachada.webp", f"{BASE}/logo.png"],
     "telephone": TEL,
     "knowsLanguage": "es",
     "address": {"@type": "PostalAddress", "streetAddress": "Mucho Lote 2, Villa España 2, Mz. 2833, Villa 15",
@@ -105,6 +105,44 @@ EMOJI = {"odontologia": "🦷", "pediatria": "👶", "ginecologia": "🤰", "med
          "ecografia": "🔊", "nutricion": "🥗", "psicologia": "🧠", "laboratorio": "🧪"}
 MAPA_EMBED = "https://www.google.com/maps?q=Centro+de+especialidades+Family+Health+Guayaquil&output=embed"
 RESENAS = "4,9 en Google · 81 opiniones"  # actualizar a mano cuando cambie (visible en la portada, no va en los datos estructurados)
+# Fotos del propio centro (subidas por la clínica a su ficha de Maps). Nunca fotos de pacientes.
+FOTO_PORTADA = ("/fotos/fachada.webp", "Fachada del Centro de Especialidades Family Health en Mucho Lote 2")
+FOTOS = [("/fotos/recepcion.webp", "Sala de espera con el logo de Family Health"),
+         ("/fotos/pasillo.webp", "Pasillo de consultorios"),
+         ("/fotos/consultorio.webp", "Sala con espacio de juego para niños")]
+
+# Blog: slug, título, descripción, fecha (AAAA-MM-DD), cuerpo HTML. Información general: la revisa un médico antes de publicar.
+BLOG = [
+    ("muelas-del-juicio", "Muelas del juicio: cuándo conviene sacarlas",
+     "No todas las muelas del juicio hay que sacarlas. Estas son las señales para ir al dentista y qué esperar de la valoración.",
+     "2026-11-24", """
+<p>Las muelas del juicio (terceros molares) suelen salir entre los 17 y los 25 años. A muchas personas les salen bien y no dan problemas. A otras les salen torcidas, a medias o se quedan atrapadas en el hueso.</p>
+<h2>Señales de que debes hacerte revisar</h2>
+<ul><li>Dolor o presión al fondo de la boca.</li><li>Encía hinchada o que sangra detrás de la última muela.</li><li>Mal sabor o mal aliento que no se quita con el cepillado.</li><li>Dificultad para abrir la boca.</li><li>Comida que se queda atrapada siempre en el mismo lugar.</li></ul>
+<h2>Cómo se decide</h2>
+<p>El dentista revisa tu boca y pide una radiografía panorámica para ver la posición de cada muela, la raíz y su cercanía con el nervio. Con eso te explica si conviene sacarla, vigilarla o dejarla.</p>
+<h2>Después de la extracción</h2>
+<p>Sigue al pie de la letra las indicaciones que te den, incluida la medicación. Regresa o escribe antes de tu control si tienes fiebre, si el sangrado no para con presión, o si la hinchazón o el dolor aumentan después del tercer día.</p>"""),
+    ("fiebre-en-ninos", "Fiebre en niños: cuándo llevarlo al pediatra",
+     "Qué se considera fiebre, qué señales indican que hay que ir de inmediato y qué hacer mientras tanto en casa.",
+     "2026-11-24", """
+<p>La fiebre es una defensa del cuerpo y casi siempre se debe a infecciones comunes. Se considera fiebre una temperatura de <strong>38 °C o más</strong>.</p>
+<h2>Ve de inmediato a emergencia si</h2>
+<ul><li>Tu bebé tiene <strong>menos de 3 meses</strong> y 38 °C o más.</li><li>Le cuesta respirar o respira muy rápido.</li><li>Está muy decaído, muy dormido o difícil de despertar.</li><li>Tiene una convulsión.</li><li>Le salen manchas en la piel que no desaparecen al presionarlas.</li><li>No orina, tiene la boca seca o llora sin lágrimas.</li></ul>
+<p>En una emergencia llama al <strong>911</strong>.</p>
+<h2>Agenda una consulta si</h2>
+<ul><li>La fiebre dura más de tres días.</li><li>Tiene dolor de oído, dolor al orinar o tos que no mejora.</li><li>La fiebre baja y vuelve a subir después de varios días.</li></ul>
+<h2>Mientras tanto, en casa</h2>
+<p>Dale líquidos con frecuencia y vístelo con ropa ligera. No le des medicamentos sin indicación del pediatra y nunca le des aspirina.</p>"""),
+    ("primera-visita-al-dentista", "Primera visita al dentista: a qué edad llevar a tu hijo",
+     "La primera consulta dental es antes de lo que muchos padres creen. Te contamos cuándo ir y cómo cuidar sus dientes en casa.",
+     "2026-11-24", """
+<p>Lo recomendado es llevar a tu hijo al dentista <strong>cuando le sale el primer diente o antes de su primer cumpleaños</strong>. En esa visita se revisa cómo vienen sus dientes y te enseñan a cuidarlos.</p>
+<h2>Cuidados en casa</h2>
+<ul><li>Cepilla sus dientes dos veces al día desde el primer diente.</li><li>Usa pasta con flúor: del tamaño de un grano de arroz hasta los 3 años, y del tamaño de una arveja de los 3 a los 6 años.</li><li>No lo acuestes con biberón de leche o jugo.</li><li>Evita darle dulces y bebidas azucaradas entre comidas.</li></ul>
+<h2>Cuándo ir antes del control</h2>
+<p>Si ves manchas blancas o cafés en sus dientes, si se queja de dolor o si se golpeó un diente, agenda una cita sin esperar al control.</p>"""),
+]
 PASOS = [("Escríbenos por WhatsApp", f"Al {TEL_VISIBLE}, cuéntanos qué especialidad necesitas."),
          ("Elige tu horario", "Te proponemos los horarios disponibles y confirmamos tu cita."),
          ("Ven a tu cita", "Te esperamos en Mucho Lote 2, con tu orden médica si tienes una.")]
@@ -134,7 +172,7 @@ def pagina(titulo, desc, ruta, cuerpo, ld):
 <meta property="og:description" content="{desc}">
 <meta property="og:type" content="website">
 <meta property="og:url" content="{url}">
-<meta property="og:image" content="{BASE}/logo.png">
+<meta property="og:image" content="{BASE}/fotos/fachada.webp">
 <meta property="og:locale" content="es_EC">
 <link rel="stylesheet" href="/style.css">
 <script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>
@@ -153,7 +191,7 @@ def pagina(titulo, desc, ruta, cuerpo, ld):
 <div><h3>{NOMBRE}</h3><p>{DIRECCION}</p><p>WhatsApp y teléfono: <a href="{WA}">{TEL_VISIBLE}</a></p><p>{redes}</p></div>
 <div><h3>Horario</h3>{horario_tabla()}</div>
 <div><h3>Especialidades</h3><p>{enlaces}</p></div>
-<div><h3>&nbsp;</h3><p>{enlaces2}</p></div>
+<div><h3>&nbsp;</h3><p>{enlaces2}</p><p><a href="/blog/">Consejos de salud</a></p></div>
 </div>
 <p class="aviso">{AVISO}</p>
 </div></footer>
@@ -182,21 +220,24 @@ def pagina_inicio():
         f'<span class="d">{e[4].split(".")[0]}.</span><span class="mas">Ver más →</span></a></li>' for e in ESPECIALIDADES)
     pasos = "".join(f"<li><strong>{t}</strong>{d}</li>" for t, d in PASOS)
     faqs = "".join(f"<details><summary>{p}</summary><p>{r}</p></details>" for p, r in FAQ)
-    cuerpo = f"""<section class="hero"><div class="wrap">
+    galeria = "".join(f'<figure><img src="{s}" alt="{a}" loading="lazy" width="900" height="1200"><figcaption>{a}</figcaption></figure>' for s, a in FOTOS)
+    cuerpo = f"""<section class="hero"><div class="wrap hero-dos"><div>
 <p class="eyebrow">Mucho Lote 2 · Norte de Guayaquil</p>
 <h1>{NOMBRE} en Guayaquil</h1>
 <p class="lead">Odontología, pediatría, ginecología, medicina general, ecografía, nutrición, psicología y laboratorio clínico en un solo lugar. Atención para toda la familia con cita previa.</p>
 <p class="acciones"><a class="btn btn-claro" href="{WA}">Agenda por WhatsApp</a><a class="btn btn-borde" href="#especialidades">Ver especialidades</a></p>
-<ul class="chips"><li>★ {RESENAS}</li><li>Niños, adultos y embarazadas</li><li>Con cita previa</li></ul>
-</div></section>
+<ul class="chips"><li><a href="{MAPA}">★ {RESENAS}</a></li><li>Niños, adultos y embarazadas</li><li>Con cita previa</li></ul>
+</div><img class="foto-hero" src="{FOTO_PORTADA[0]}" alt="{FOTO_PORTADA[1]}" width="900" height="900"></div></section>
 <div class="wrap">
 {tarjetas_info()}
 <section class="bloque" id="especialidades"><h2>Nuestras especialidades</h2><p class="sub">Elige una para ver qué ofrecemos.</p><ul class="cards">{tarjetas}</ul></section>
+<section class="bloque"><h2>Nuestras instalaciones</h2><p class="sub">Así es el centro por dentro.</p><div class="galeria">{galeria}</div></section>
 <section class="bloque"><h2>Cómo agendar tu cita</h2><p class="sub">Tres pasos, sin filas.</p><ol class="pasos">{pasos}</ol></section>
 <section class="bloque"><h2>Dónde encontrarnos</h2><p class="sub">{DIRECCION}.</p>
 <div class="dos"><div><iframe class="mapa" title="Mapa de {NOMBRE}" src="{MAPA_EMBED}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
 <div><h3>Horario</h3>{horario_tabla()}<p class="acciones" style="margin-top:14px"><a class="btn" href="{MAPA}">Cómo llegar</a></p></div></div></section>
 <section class="bloque"><h2>Preguntas frecuentes</h2>{faqs}</section>
+<section class="bloque"><h2>Consejos de salud</h2><p class="sub">Información general escrita por el centro. <a href="/blog/">Ver todos</a></p><ul class="cards">{tarjetas_blog()}</ul></section>
 {bloque_cita()}
 </div>"""
     faq_ld = {"@context": "https://schema.org", "@type": "FAQPage",
@@ -231,6 +272,37 @@ def pagina_especialidad(e):
     return pagina(f"{h1} | Family Health", desc, f"{slug}/", cuerpo, ld)
 
 
+def tarjetas_blog():
+    return "".join(f'<li><a href="/blog/{b[0]}/"><strong>{b[1]}</strong><span class="d">{b[2]}</span><span class="mas">Leer →</span></a></li>' for b in BLOG)
+
+
+def pagina_blog_indice():
+    cuerpo = f"""<section class="hero hero-sm"><div class="wrap">
+<p class="migas"><a href="/">Inicio</a> › Consejos de salud</p>
+<h1>Consejos de salud</h1>
+<p class="lead">Información general para cuidar a tu familia. No reemplaza una consulta: si tienes dudas, escríbenos.</p>
+</div></section>
+<div class="wrap"><section class="bloque"><ul class="cards">{tarjetas_blog()}</ul></section>{bloque_cita()}</div>"""
+    ld = {"@context": "https://schema.org", "@type": "Blog", "name": "Consejos de salud", "url": f"{BASE}/blog/",
+          "inLanguage": "es", "publisher": {"@id": f"{BASE}/#clinic"}}
+    return pagina("Consejos de salud | Family Health", "Consejos de salud del Centro de Especialidades Family Health, Guayaquil.", "blog/", cuerpo, ld)
+
+
+def pagina_articulo(b):
+    slug, titulo, desc, fecha, html = b
+    cuerpo = f"""<section class="hero hero-sm"><div class="wrap">
+<p class="migas"><a href="/">Inicio</a> › <a href="/blog/">Consejos de salud</a></p>
+<h1>{titulo}</h1>
+<p class="lead">{desc}</p>
+</div></section>
+<div class="wrap"><article class="articulo">{html}
+<p class="aviso-art">{AVISO}</p></article>{bloque_cita("¿Quieres que te revisemos?")}</div>"""
+    ld = {"@context": "https://schema.org", "@type": "BlogPosting", "headline": titulo, "description": desc,
+          "datePublished": fecha, "inLanguage": "es", "url": f"{BASE}/blog/{slug}/",
+          "author": {"@id": f"{BASE}/#clinic"}, "publisher": {"@id": f"{BASE}/#clinic"}}
+    return pagina(f"{titulo} | Family Health", desc, f"blog/{slug}/", cuerpo, ld)
+
+
 def escribir(ruta, texto):
     destino = OUT / ruta
     destino.parent.mkdir(parents=True, exist_ok=True)
@@ -241,9 +313,13 @@ def main():
     escribir("index.html", pagina_inicio())
     for e in ESPECIALIDADES:
         escribir(f"{e[0]}/index.html", pagina_especialidad(e))
+    escribir("blog/index.html", pagina_blog_indice())
+    for b in BLOG:
+        escribir(f"blog/{b[0]}/index.html", pagina_articulo(b))
 
     hoy = datetime.date.today().isoformat()
-    urls = [f"{BASE}/"] + [f"{BASE}/{e[0]}/" for e in ESPECIALIDADES]
+    urls = ([f"{BASE}/"] + [f"{BASE}/{e[0]}/" for e in ESPECIALIDADES]
+            + [f"{BASE}/blog/"] + [f"{BASE}/blog/{b[0]}/" for b in BLOG])
     items = "".join(f"<url><loc>{u}</loc><lastmod>{hoy}</lastmod></url>" for u in urls)
     escribir("sitemap.xml", f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{items}</urlset>')
     escribir("robots.txt", f"User-agent: *\nAllow: /\n\nSitemap: {BASE}/sitemap.xml\n")
@@ -269,9 +345,13 @@ def main():
 
 {chr(10).join(f"- {p} {r}" for p, r in FAQ)}
 
+## Consejos de salud
+
+{chr(10).join(f"- [{b[1]}]({BASE}/blog/{b[0]}/): {b[2]}" for b in BLOG)}
+
 {AVISO}
 """)
-    print(f"{len(ESPECIALIDADES) + 1} páginas generadas")
+    print(f"{len(urls)} páginas generadas")
 
 
 if __name__ == "__main__":
