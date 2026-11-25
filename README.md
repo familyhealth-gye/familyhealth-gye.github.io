@@ -13,8 +13,8 @@ Todo el contenido está en `build.py` (arriba: datos del centro, especialidades,
 - Sin número de permiso ACESS, sin precios, sin reseñas ni calificación en los datos estructurados (a propósito).
 - El texto de cada especialidad lo debería revisar el abogado/DPO y un médico, como el resto de la app.
 - **Blog** (`BLOG` en `build.py`, 3 artículos): información general escrita sin revisión médica. Un médico del centro debe leer cada artículo antes de publicar.
-- **Horario**: el sitio usa el de Google Maps (L–V 8:30–19:00, sáb. 8:30–16:00). El roll-up de la fachada dice otro (L–V 08:00–20:00, sáb. 10:00–15:00). Confirmar cuál es el real y dejar uno solo en todos lados.
-- **Fotos** (`fotos/`): las que la clínica subió a su ficha de Maps, sin pacientes. Nunca agregar fotos donde se vea un paciente sin su consentimiento escrito.
+- **Horario**: confirmado por el dueño 2026-11-25: L–V 8:30–19:00 (Maps), sáb. 9:00–16:00. Si Maps dice otra hora el sábado, corregir Maps.
+- **Fotos** (`fotos/`): las que la clínica subió a su ficha de Maps, sin pacientes reales (la de consulta es con un creador de contenido que trabaja para el centro). Nunca agregar fotos donde se vea un paciente sin su consentimiento escrito.
 - **Reseñas**: «4,9 · 81 opiniones» está escrito a mano (`RESENAS`); el chip enlaza a Google, donde siempre está el número real. Actualizarlo de vez en cuando.
 
 ## Publicar gratis (GitHub Pages)

@@ -20,7 +20,7 @@ REDES = [
     ("Facebook", "https://www.facebook.com/familyhealthgye"),
     ("TikTok", "https://www.tiktok.com/@familyhealth.gye"),
 ]
-HORARIO = [("Lunes a viernes", "8:30 a. m. – 7:00 p. m."), ("Sábado", "8:30 a. m. – 4:00 p. m."), ("Domingo", "Cerrado")]
+HORARIO = [("Lunes a viernes", "8:30 a. m. – 7:00 p. m."), ("Sábado", "9:00 a. m. – 4:00 p. m."), ("Domingo", "Cerrado")]
 AVISO = "Este sitio es informativo y no reemplaza una consulta médica. En una emergencia llama al 911."
 
 # slug, nombre corto, título H1, descripción meta, introducción, servicios, valor de schema.org `specialty` (o None)
@@ -71,7 +71,7 @@ ESPECIALIDADES = [
 FAQ = [
     ("¿Necesito cita previa?", f"Atendemos con cita previa. Escríbenos por WhatsApp al {TEL_VISIBLE} y te indicamos los horarios disponibles."),
     ("¿Dónde están ubicados?", f"{DIRECCION}, en el norte de la ciudad."),
-    ("¿Cuál es el horario de atención?", "De lunes a viernes de 8:30 a. m. a 7:00 p. m. y los sábados de 8:30 a. m. a 4:00 p. m. Los domingos estamos cerrados."),
+    ("¿Cuál es el horario de atención?", "De lunes a viernes de 8:30 a. m. a 7:00 p. m. y los sábados de 9:00 a. m. a 4:00 p. m. Los domingos estamos cerrados."),
     ("¿Atienden a toda la familia?", "Sí. En el mismo centro hay atención para adultos, niños y embarazadas, con varias especialidades."),
     ("¿Cómo agendo mi cita?", f"Por WhatsApp al {TEL_VISIBLE}. Dinos la especialidad que necesitas y qué día te conviene."),
 ]
@@ -92,7 +92,7 @@ CLINICA = {
     "areaServed": {"@type": "City", "name": "Guayaquil"},
     "openingHoursSpecification": [
         {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], "opens": "08:30", "closes": "19:00"},
-        {"@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "08:30", "closes": "16:00"},
+        {"@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "09:00", "closes": "16:00"},
     ],
     "medicalSpecialty": [e[6] for e in ESPECIALIDADES if e[6]],
     "hasOfferCatalog": {"@type": "OfferCatalog", "name": "Especialidades", "itemListElement": [
@@ -105,11 +105,13 @@ EMOJI = {"odontologia": "🦷", "pediatria": "👶", "ginecologia": "🤰", "med
          "ecografia": "🔊", "nutricion": "🥗", "psicologia": "🧠", "laboratorio": "🧪"}
 MAPA_EMBED = "https://www.google.com/maps?q=Centro+de+especialidades+Family+Health+Guayaquil&output=embed"
 RESENAS = "4,9 en Google · 81 opiniones"  # actualizar a mano cuando cambie (visible en la portada, no va en los datos estructurados)
-# Fotos del propio centro (subidas por la clínica a su ficha de Maps). Nunca fotos de pacientes.
+# Fotos del propio centro (subidas por la clínica a su ficha de Maps). Nunca fotos de pacientes reales:
+# la de consulta es con un creador de contenido que trabaja para el centro (autorizado por el dueño, 2026-11-25).
 FOTO_PORTADA = ("/fotos/fachada.webp", "Fachada del Centro de Especialidades Family Health en Mucho Lote 2")
 FOTOS = [("/fotos/recepcion.webp", "Sala de espera con el logo de Family Health"),
          ("/fotos/pasillo.webp", "Pasillo de consultorios"),
-         ("/fotos/consultorio.webp", "Sala con espacio de juego para niños")]
+         ("/fotos/consultorio.webp", "Sala con espacio de juego para niños"),
+         ("/fotos/consulta.webp", "Una de nuestras doctoras en consulta")]
 
 # Blog: slug, título, descripción, fecha (AAAA-MM-DD), cuerpo HTML. Información general: la revisa un médico antes de publicar.
 BLOG = [
@@ -261,7 +263,7 @@ def pagina_especialidad(e):
 {tarjetas_info()}
 <section class="bloque"><h2>Qué ofrecemos</h2><ul class="checks">{lista}</ul></section>
 <section class="bloque"><h2>Dónde y cuándo</h2>
-<p>{NOMBRE}, {DIRECCION}. Atendemos con cita previa de lunes a viernes de 8:30 a. m. a 7:00 p. m. y los sábados de 8:30 a. m. a 4:00 p. m.</p></section>
+<p>{NOMBRE}, {DIRECCION}. Atendemos con cita previa de lunes a viernes de 8:30 a. m. a 7:00 p. m. y los sábados de 9:00 a. m. a 4:00 p. m.</p></section>
 <section class="bloque"><h2>Otras especialidades</h2><ul class="otras">{otras}</ul></section>
 {bloque_cita()}
 </div>"""
